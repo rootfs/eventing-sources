@@ -26,7 +26,7 @@ import (
 	"time"
 
 	"github.com/golang/glog"
-	"github.com/knative/eventing/pkg/event"
+	"github.com/knative/pkg/cloudevents"
 	"github.com/knative/pkg/signals"
 
 	"github.com/ceph/rgw-pubsub-api/go/pkg"
@@ -129,9 +129,9 @@ func main() {
 }
 
 // Creates a CloudEvent Context for a pubsub event.
-func cloudEventsContext(e *rgwpubsub.RGWEvent) *event.EventContext {
-	return &event.EventContext{
-		CloudEventsVersion: event.CloudEventsVersion,
+func cloudEventsContext(e *rgwpubsub.RGWEvent) *cloudevents.EventContext {
+	return &cloudevents.EventContext{
+		CloudEventsVersion: cloudevents.CloudEventsVersion,
 		EventType:          "dev.knative.source.rgwpubsub",
 		EventID:            e.Id,
 		Source:             "rgwpubsub",
@@ -145,7 +145,7 @@ func postMessage(target string, e *rgwpubsub.RGWEvent) error {
 	log.Printf("Posting to %q", target)
 	// Explicitly using Binary encoding so that Istio, et. al. can better inspect
 	// event metadata.
-	req, err := event.Binary.NewRequest(target, e, *ctx)
+	req, err := cloudevents.Binary.NewRequest(target, e, *ctx)
 	if err != nil {
 		log.Printf("Failed to create http request: %s", err)
 		return err

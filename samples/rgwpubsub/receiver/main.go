@@ -22,17 +22,17 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/knative/eventing/pkg/event"
+	"github.com/knative/pkg/cloudevents"
 
 	"github.com/ceph/rgw-pubsub-api/go/pkg"
 )
 
 func handler(ctx context.Context, e *rgwpubsub.RGWEvent) {
-	metadata := event.FromContext(ctx)
+	metadata := cloudevents.FromContext(ctx)
 	log.Printf("[%s] %s %s. Object: %q  Bucket: %q", metadata.EventTime.Format(time.RFC3339), metadata.ContentType, metadata.Source, e.Info.Key.Name, e.Info.Bucket.Name)
 }
 
 func main() {
 	log.Print("Ready and listening on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", event.Handler(handler)))
+	log.Fatal(http.ListenAndServe(":8080", cloudevents.Handler(handler)))
 }
