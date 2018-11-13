@@ -3,19 +3,22 @@ kind: ContainerSource
 metadata:
   labels:
     controller-tools.k8s.io: "1.0"
-  name: containersource-sample
+  name: containersource-rgwpubsub
+  namespace: rgwpubsub
 spec:
-  image: github.com/knative/eventing-sources/cmd/rgwpubsub/
+  image: github.com/knative/eventing-sources/cmd/rgwpubsubsource/
   args:
     - '--subscriptionname=sub1'
+    - '--username=rgwtest'
   env:
    - name: S3_ACCESS_KEY_ID
      value: 'F4YVBJ5RFFQQM66FZY5Z'
    - name: S3_SECRET_ACCESS_KEY
      value: 'NcWQ043PMQfLNsHPTieZVQ5kNPCHKGM3lVdAXayg'
    - name: S3_HOSTNAME
-     value: 'http://mira034'
+     value: 'http://mira034.front.sepia.ceph.com'
   sink:
     apiVersion: eventing.knative.dev/v1alpha1
     kind: Channel
     name: rgw-ps-channel
+
