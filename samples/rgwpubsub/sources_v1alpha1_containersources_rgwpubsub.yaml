@@ -16,6 +16,6 @@ spec:
    - name: S3_HOSTNAME
      value: 'http://mira034'
   sink:
-    kind: Route
-    apiVersion: serving.knative.dev/v1alpha1
-    name: rgwpubsub-route
+    apiVersion: eventing.knative.dev/v1alpha1
+    kind: Channel
+    name: rgw-ps-channel
